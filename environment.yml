@@ -1,0 +1,5 @@
+name: TwitterClone
+channels:
+    - default
+dependencies:
+    - python
