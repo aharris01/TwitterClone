@@ -5,14 +5,25 @@ channels:
   - https://repo.anaconda.com/pkgs/r
   - https://repo.anaconda.com/pkgs/msys2
 dependencies:
+  - blinker=1.9.0=py313haa95532_0
   - bzip2=1.0.8=h2bbff1b_6
   - ca-certificates=2025.2.25=haa95532_0
+  - cffi=1.17.1=py313h827c3e9_1
+  - colorama=0.4.6=py313haa95532_0
+  - cryptography=44.0.1=py313hbd6ee87_0
   - expat=2.6.4=h8ddb27b_0
+  - flask=3.1.0=py313haa95532_0
+  - flask-sqlalchemy=3.1.1=py313haa95532_0
   - greenlet=3.1.1=py313h5da7b33_0
+  - itsdangerous=2.2.0=py313haa95532_0
+  - jinja2=3.1.6=py313haa95532_0
   - libffi=3.4.4=hd77b12b_1
   - libmpdec=4.0.0=h827c3e9_0
+  - markupsafe=3.0.2=py313h827c3e9_0
   - openssl=3.0.16=h3f729d1_0
   - pip=25.0=py313haa95532_0
+  - pycparser=2.21=pyhd3eb1b0_0
+  - pyopenssl=25.0.0=py313hb6ff9d5_0
   - python=3.13.2=hadb2040_100_cp313
   - python_abi=3.13=0_cp313
   - setuptools=75.8.0=py313haa95532_0
@@ -24,7 +35,15 @@ dependencies:
   - tzdata=2025a=h04d1e81_0
   - vc=14.42=haa95532_4
   - vs2015_runtime=14.42.34433=he0abc0d_4
+  - werkzeug=3.1.3=py313haa95532_0
   - wheel=0.45.1=py313haa95532_0
   - xz=5.6.4=h4754444_1
   - zlib=1.2.13=h8cc25b3_1
-prefix: C:\Users\mozar\miniconda3\envs\TwitterClone
+  - pip:
+      - black==25.1.0
+      - click==8.1.8
+      - mypy-extensions==1.0.0
+      - packaging==24.2
+      - pathspec==0.12.1
+      - platformdirs==4.3.6
+prefix: C:\Users\Aidan\miniconda3\envs\TwitterClone
