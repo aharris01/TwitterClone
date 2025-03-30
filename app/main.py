@@ -87,6 +87,16 @@ def dashboard():
     return render_template("dashboard.html", username=session["username"])
 
 
+@app.route("/logout")
+def logout():
+    return
+
+
+@app.route("/changepassword")
+def changePassword():
+    return
+
+
 def validateUsername(username):
     regex = "^[A-Za-z0-9_-]{1,32}$"
     return not (re.search(regex, username) == None)
