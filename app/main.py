@@ -35,8 +35,7 @@ def login():
             session["user_id"] = user.id
             session["username"] = user.userName
             flash("Login successful!", "success")
-            return render_template("login.html")
-            # return redirect(url_for("dashboard"))
+            return redirect(url_for("dashboard"))
         else:
             flash("That user does not exist", "error")
             return render_template("login.html")
@@ -81,7 +80,11 @@ def createAccount():
 
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")
+    if "user_id" not in session:
+        flash("Please login first", "error")
+        return redirect(url_for("login"))
+
+    return render_template("dashboard.html", username=session["username"])
 
 
 def validateUsername(username):
