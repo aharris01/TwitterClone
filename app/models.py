@@ -5,7 +5,7 @@ from argon2 import PasswordHasher
 # The User class stores passwords with Argon2id hashing
 # The parameters were chosen based on https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#password-hashing-algorithms
 class User(db.Model):
-    id = db.Column(db.Integer, primaryKey=True)
+    id = db.Column(db.Integer, primary_key=True)
     userName = db.Column(db.String(32), unique=True, nullable=False)
     passwordHash = db.Column(db.String(128), nullable=False)
 
