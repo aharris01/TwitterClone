@@ -6,7 +6,7 @@ from argon2 import PasswordHasher
 # The parameters were chosen based on https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#password-hashing-algorithms
 class User(db.Model):
     id = db.Column(db.Integer, primaryKey=True)
-    userName = db.Column(db.String(80), unique=True, nullable=False)
+    userName = db.Column(db.String(32), unique=True, nullable=False)
     passwordHash = db.Column(db.String(128), nullable=False)
 
     def setPassword(self, password):

@@ -1,4 +1,4 @@
-from flask import request, jsonify, render_template, redirect, url_for
+from flask import request, jsonify, render_template, redirect, url_for, flash
 from config import app
 import re
 from markupsafe import escape
@@ -17,10 +17,12 @@ def login():
 
         # Handle empty values
         if not username or not password:
+            flash("Username and password are required", "error")
             return render_template("login.html")
 
         # Username too large for system
         if len(username) > 80:
+            flash("Username too large", "error")
             return render_template("login.html")
 
         # Check if the username is valid
