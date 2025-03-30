@@ -92,9 +92,23 @@ def logout():
     return
 
 
-@app.route("/changepassword")
+@app.route("/changepassword", methods=["PATCH", "GET"])
 def changePassword():
-    return
+    if "user_id" not in session:
+        flash("Please login first", "error")
+        return redirect(url_for("login"))
+    elif request.method == "PATCH":
+        print(
+            f"Current password: {request.form.get('current_password')}, New Password: {request.form.get('new_password')}"
+        )
+        newPassword = request.form.get("password")
+        userID = session["user_id"]
+
+        user = db.session.query(User).where(id=userID)
+        user.setPassword(newPassword)
+        db.session.commit()
+
+    return render_template("changepassword.html")
 
 
 def validateUsername(username):
