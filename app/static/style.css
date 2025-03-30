@@ -3,57 +3,57 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    padding: 15px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    height: 100vh;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.logout-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 15px;
 }
 
 .container {
-    background-color: white;
+    max-width: 1200px;
+    margin: 20px auto;
     padding: 20px;
+    background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
 }
 
-h2 {
-    text-align: center;
-    color: #333;
+.menu {
+    background-color: #444;
+    padding: 10px;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input[type="text"],
-input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    box-sizing: border-box;
-}
-
-button {
-    background-color: #4CAF50;
+.menu a {
     color: white;
+    text-decoration: none;
     padding: 10px 15px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
+    margin-right: 5px;
 }
 
-button:hover {
-    background-color: #45a049;
+.menu a:hover {
+    background-color: #555;
+    border-radius: 3px;
 }
 
 .flash-messages {
