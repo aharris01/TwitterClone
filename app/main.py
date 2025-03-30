@@ -29,7 +29,17 @@ def login():
             flash("Invalid username", "error")
             return render_template("login.html")
 
-        return "<p>Good Job!</p>"
+        user = db.session.query(User).filter_by(userName=username).first()
+
+        if user and user.checkPassword(password):
+            session["user_id"] = user.id
+            session["username"] = user.userName
+            flash("Login successful!", "success")
+            return render_template("login.html")
+            # return redirect(url_for("dashboard"))
+        else:
+            flash("That user does not exist", "error")
+            return render_template("login.html")
 
     return render_template("login.html")
 
