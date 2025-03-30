@@ -34,6 +34,11 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+
 def validateUsername(username):
     regex = "^[A-Za-z0-9_-]{1,32}$"
     return not (re.search(regex, username) == None)
