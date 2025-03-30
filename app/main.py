@@ -34,6 +34,16 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/users")
+def users():
+    users = db.session.query(User).all()
+    userlist = []
+    for user in users:
+        userlist.append({"Username": user.userName})
+        print(f"Username: {user.userName}")
+    return jsonify(userlist)
+
+
 @app.route("/createAccount", methods=["GET", "POST"])
 def createAccount():
     if request.method == "POST":
@@ -65,6 +75,8 @@ def createAccount():
             db.session.rollback()
             print(e)
             flash("An error occurred creating the account", "error")
+
+        return redirect(url_for("users"))
 
     return render_template("createuser.html")
 
