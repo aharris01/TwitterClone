@@ -1,7 +1,12 @@
-from flask import request, jsonify, render_template
+from flask import request, jsonify, render_template, redirect, url_for
 from config import app
 import re
 from markupsafe import escape
+
+
+@app.route("/")
+def index():
+    return redirect(url_for("login"))
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -20,7 +25,6 @@ def login():
 
         # Check if the username is valid
         if not validateUsername(username):
-            print("login failed")
             return render_template("login.html")
 
         return "<p>Good Job!</p>"

@@ -14,6 +14,5 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
         alert('Username contains invalid characters');
         return false
     }
-    alert('Successfully logged in');
     return true;
 });
