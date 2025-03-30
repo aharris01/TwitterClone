@@ -10,16 +10,31 @@
 
 <body>
     <div class="header">
-        <h2>Twotter</h2>
+        <h2>Secure Application Dashboard</h2>
         <div class="user-info">
-            <span>Welcome,!</span>
-            <a>Logout</a>
+            <span>Welcome, {{ username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
         </div>
     </div>
 
     <div class="menu">
-        <a>Home</a>
-        <a>Change password</a>
+        <a href="{{ url_for('dashboard') }}">Home</a>
+        <a href="{{ url_for('change_password') }}">Change Password</a>
+    </div>
+
+    <div class="container">
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <h3>Dashboard</h3>
+        <p>Welcome to the secure application dashboard. Use the menu above to navigate.</p>
     </div>
 </body>
 
