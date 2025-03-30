@@ -89,7 +89,9 @@ def dashboard():
 
 @app.route("/logout")
 def logout():
-    return
+    session.clear()
+    flash("You have been logged out", "info")
+    return redirect(url_for("login"))
 
 
 @app.route("/changepassword", methods=["PATCH", "GET"])
