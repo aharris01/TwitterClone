@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Create Account</title>
     <link rel="stylesheet" href="static/loginstyle.css">
 </head>
 
 <body>
     <div class="container">
-        <h2>Login</h2>
+        <h2>Create Account</h2>
 
         <div class="flash-messages">
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -21,22 +22,20 @@
             {% endwith %}
         </div>
 
-        <form id="loginForm" method="post" action="{{ url_for('login') }}">
+        <form id="createAccountForm" method="post" action="{{ url_for('createAccount')}}">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required autocomplete="username">
+                <input type="text" id="username" name="username">
             </div>
 
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
+                <input type="password" id="password" name="password">
             </div>
 
-            <button type="submit">Login</button>
+            <button type="submit">Sign Up</button>
         </form>
-
-        <div class="create-account">
-            <a href="{{ url_for('createAccount')}}">Create Account!</a>
-        </div>
-    <script src="static/login.js"></script>
+    </div>
 </body>
+
+</html>
