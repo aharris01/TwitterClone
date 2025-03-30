@@ -1,5 +1,5 @@
 from flask import request, jsonify, render_template, redirect, url_for, flash
-from config import app
+from config import app, db
 import re
 from markupsafe import escape
 
