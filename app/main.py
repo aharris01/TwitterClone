@@ -1,7 +1,6 @@
 from flask import request, jsonify, render_template, redirect, url_for, flash, session
-from config import app, db
+from config import app, db, bl
 from models import User
-from argon2 import PasswordHasher
 import re
 import os
 
@@ -51,8 +50,6 @@ def createAccount():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        print(f"Username: {username}, Password: {password}")
-
         # Handle empty values
         if not username or not password:
             flash("Username and password are required", "error")
@@ -64,6 +61,10 @@ def createAccount():
                 "Invalid username. Must contain only letters, numbers, underscores or hyphens and be at most 32 characters long",
                 "error",
             )
+            return render_template("createuser.html")
+
+        if not validatePassword(password):
+            flash("Password too weak", "error")
             return render_template("createuser.html")
 
         newUser = User(userName=username)
@@ -119,7 +120,7 @@ def changePassword():
         # Check password strength (will be updated later)
         if not validatePassword(newPassword):
             flash(
-                "Password must be at least 8 characters long, and contain only printable characters",
+                "Password is too weak. Password can't be easily guessable and must be at least 8 characters long, and contain only printable characters",
                 "error",
             )
             return render_template("changepassword.html")
@@ -147,7 +148,15 @@ def validateUsername(username):
 
 def validatePassword(password):
     regex = "^[\x20-\x7e]{8,64}$"
-    return not (re.search(regex, password) == None)
+    if re.search(regex, password) is None:
+        return False
+
+    print(bl.check(password))
+    if bl is not None and bl.check(password):
+        print(f"bl: {bl}, validity: {bl.check(password)}")
+        return False
+
+    return True
 
 
 if __name__ == "__main__":
