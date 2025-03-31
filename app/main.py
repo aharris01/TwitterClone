@@ -117,12 +117,16 @@ def changePassword():
             return render_template("changepassword.html")
 
         # Check password strength (will be updated later)
-        if len(newPassword) < 8:
-            flash("Password must be at least 8 characters long", "error")
+        if not validatePassword(newPassword):
+            flash(
+                "Password must be at least 8 characters long, and contain only printable characters",
+                "error",
+            )
             return render_template("changepassword.html")
 
         # Get user from database
         user = db.session.query(User).where(User.id == session["user_id"]).first()
+
         # Confirm authentication
         if not user.checkPassword(currentPassword):
             flash("Current password is incorrect", "error")
@@ -139,6 +143,11 @@ def changePassword():
 def validateUsername(username):
     regex = "^[A-Za-z0-9_-]{1,32}$"
     return not (re.search(regex, username) == None)
+
+
+def validatePassword(password):
+    regex = "^[\x20-\x7e]{8,64}$"
+    return not (re.search(regex, password) == None)
 
 
 if __name__ == "__main__":
