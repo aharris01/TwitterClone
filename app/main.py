@@ -102,12 +102,35 @@ def changePassword():
         flash("Please login first", "error")
         return redirect(url_for("login"))
     if request.method == "POST":
+        currentPassword = request.form.get("current_password")
         newPassword = request.form.get("new_password")
-        userID = session["user_id"]
+        confirmPassword = request.form.get("confirm_password")
 
-        user = db.session.query(User).where(User.id == userID).first()
+        # Handle empty values
+        if not currentPassword or not newPassword or not confirmPassword:
+            flash("All fields are required", "error")
+            return render_template("changepassword.html")
+
+        # New passwords match
+        if newPassword != confirmPassword:
+            flash("New passwords do not match", "error")
+            return render_template("changepassword.html")
+
+        # Check password strength (will be updated later)
+        if len(newPassword) < 8:
+            flash("Password must be at least 8 characters long", "error")
+            return render_template("changepassword.html")
+
+        # Get user from database
+        user = db.session.query(User).where(User.id == session["user_id"]).first()
+        # Confirm authentication
+        if not user.checkPassword(currentPassword):
+            flash("Current password is incorrect", "error")
+            return render_template("changepassword.html")
+
         user.setPassword(newPassword)
         db.session.commit()
+        flash("Password updated successfully", "success")
         return render_template("dashboard.html")
 
     return render_template("changepassword.html")
