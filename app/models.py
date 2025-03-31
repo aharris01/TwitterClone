@@ -15,7 +15,10 @@ class User(db.Model):
 
     def checkPassword(self, password):
         ph = PasswordHasher(time_cost=5, memory_cost=12288, parallelism=1)
-        return ph.verify(self.passwordHash, password)
+        try:
+            return ph.verify(self.passwordHash, password)
+        except Exception as e:
+            return False
 
     def to_json(self):
         return {"id": self.id, "userName": self.userName}

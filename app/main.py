@@ -6,6 +6,8 @@ import re
 import os
 
 app.config["SECRET_KEY"] = os.urandom(24)
+app.config["SESSION_COOKIE_SECURE"] = True
+# app.config["SESSION_COOKIE_SAMESITE"] = True
 
 
 @app.route("/")
@@ -21,12 +23,12 @@ def login():
 
         # Handle empty values
         if not username or not password:
-            flash("Username and password are required", "error")
+            flash("Invalild Username or Password", "error")
             return render_template("login.html")
 
         # Check if the username is valid
         if not validateUsername(username):
-            flash("Invalid username", "error")
+            flash("Invalid Username or Password", "error")
             return render_template("login.html")
 
         user = db.session.query(User).filter_by(userName=username).first()
@@ -37,7 +39,7 @@ def login():
             flash("Login successful!", "success")
             return redirect(url_for("dashboard"))
         else:
-            flash("That user does not exist", "error")
+            flash("Invalid Username or Password", "error")
             return render_template("login.html")
 
     return render_template("login.html")
@@ -94,21 +96,19 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/changepassword", methods=["PATCH", "GET"])
+@app.route("/changepassword", methods=["POST", "GET"])
 def changePassword():
     if "user_id" not in session:
         flash("Please login first", "error")
         return redirect(url_for("login"))
-    elif request.method == "PATCH":
-        print(
-            f"Current password: {request.form.get('current_password')}, New Password: {request.form.get('new_password')}"
-        )
-        newPassword = request.form.get("password")
+    if request.method == "POST":
+        newPassword = request.form.get("new_password")
         userID = session["user_id"]
 
-        user = db.session.query(User).where(id=userID)
+        user = db.session.query(User).where(User.id == userID).first()
         user.setPassword(newPassword)
         db.session.commit()
+        return render_template("dashboard.html")
 
     return render_template("changepassword.html")
 
