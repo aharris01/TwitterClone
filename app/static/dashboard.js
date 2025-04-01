@@ -22,8 +22,14 @@ loadMoreBtn.addEventListener('click', async () => {
             const postDiv = document.createElement('div');
             postDiv.classList.add('post');
             postDiv.innerHTML = `
-                  <p>${post.content}</p>
-                  <small>Posted on ${post.createdAt}</small>
+                  <div class="post">
+                    <div class="post-header">
+                        <span class="post-author">${post.author}</span>
+                        <span class="post-time">${post.createdAt}</span>
+                    </div>
+                    <p>${post.content}</p>
+                    <!--jinja2 automatically encodes special characters like <, >, etc. so if backend validation fails this should catch anything else-->
+                </div>
                 `;
             postsContainer.appendChild(postDiv);
         });

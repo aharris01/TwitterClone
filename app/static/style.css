@@ -93,13 +93,6 @@ input {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    padding: 12px 20px;
-    background-color: #4CAF50;
-    color: white;
-    text-decoration: none;
-    border-radius: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-weight: bold;
     z-index: 1000;
 }
 
@@ -113,11 +106,9 @@ input {
     font-weight: bold;
 }
 
-.create-post-button {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1000;
+.post-button {
+    margin: 0 auto;
+    display: block;
 }
 
 #loadMoreBtn {
@@ -152,4 +143,48 @@ input {
 
 .form-group {
     margin-bottom: 15px;
+}
+
+.create-post-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.post {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.post-author {
+    font-weight: bold;
+}
+
+.post-time {
+    font-style: italic;
+}
+
+.post-content {
+    font-size: 1rem;
+    line-height: 1.4;
 }

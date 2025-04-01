@@ -130,8 +130,18 @@ def dashboard():
         return notAuthenticated
     # Preload 10 most recent posts
     posts = db.session.query(Post).order_by(Post.createdAt.desc()).limit(10).all()
+    data = []
+    for post in posts:
+        data.append(
+            {
+                "id": post.id,
+                "content": post.content,
+                "createdAt": post.createdAt,
+                "author": post.user.userName,
+            }
+        )
 
-    return render_template("dashboard.html", username=session["username"], posts=posts)
+    return render_template("dashboard.html", username=session["username"], posts=data)
 
 
 @app.route("/api/recentposts")
@@ -157,7 +167,12 @@ def recentPosts():
     data = []
     for post in posts:
         data.append(
-            {"id": post.id, "content": post.content, "createdAt": post.createdAt}
+            {
+                "id": post.id,
+                "content": post.content,
+                "createdAt": post.createdAt.strftime("%Y-%m-%d %H:%M"),
+                "author": post.user.userName,
+            }
         )
 
     return jsonify(data)

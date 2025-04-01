@@ -39,12 +39,14 @@
         <div class="content">
             {% block content %}
             <div class="posts" id="posts-container">
-                <h4>Recent Posts</h4>
                 {% for post in posts %}
                 <div class="post">
+                    <div class="post-header">
+                        <span class="post-author">{{ post.author }}</span>
+                        <span class="post-time">{{ post.createdAt.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
                     <p>{{ post.content }}</p>
                     <!--jinja2 automatically encodes special characters like <, >, etc. so if backend validation fails this should catch anything else-->
-                    <small>Posted on {{ post.createdAt }}</small>
                 </div>
                 {% endfor %}
             </div>

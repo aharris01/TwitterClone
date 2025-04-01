@@ -21,7 +21,7 @@
         <a href="{{ url_for('dashboard') }}">Home</a>
         <a href="{{ url_for('changePassword') }}">Change Password</a>
     </div>
-    <div class="content">
+    <div class="create-post-container">
         <h1>Create a New Post</h1>
 
         {% if error %}
@@ -33,7 +33,7 @@
                 <textarea name="content" placeholder="What's on your mind?"></textarea>
             </div>
             <div>
-                <button type="submit" class="button">Post</button>
+                <button type="submit" class="button-common post-button">Post</button>
             </div>
         </form>
     </div>
