@@ -5,6 +5,14 @@ body {
     padding: 0;
 }
 
+input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
 .header {
     background-color: #333;
     color: white;
@@ -79,4 +87,69 @@ body {
 .flash-message.info {
     background-color: #e7f3fe;
     border-left: 6px solid #2196F3;
+}
+
+.create-post-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    z-index: 1000;
+}
+
+.button-common {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+}
+
+.create-post-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+#loadMoreBtn {
+    display: block;
+    margin: 20px auto;
+}
+
+.password-strength {
+    margin-top: 5px;
+    height: 5px;
+    background-color: #ddd;
+    max-width: 400px;
+}
+
+.password-strength-bar {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s;
+}
+
+.weak {
+    background-color: #ff4d4d;
+}
+
+.medium {
+    background-color: #ffb84d;
+}
+
+.strong {
+    background-color: #4CAF50;
+}
+
+.form-group {
+    margin-bottom: 15px;
 }

@@ -1,22 +1,3 @@
-document.getElementById('loginForm').addEventListener('submit', function (event) {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    if (!username || !password) {
-        event.preventDefault();
-        alert('Username and password are required');
-        return false;
-    }
-
-    const re = new RegExp("^[A-Za-z0-9_-]{1,32}$");
-    if (!re.test(username)) {
-        event.preventDefault();
-        alert('Username contains invalid characters');
-        return false
-    }
-    return true;
-});
-
 document.getElementById('new_password').addEventListener('input', function () {
     const password = this.value;
     const strengthBar = document.getElementById('passwordStrengthBar');
@@ -87,16 +68,6 @@ document.getElementById('changePasswordForm').addEventListener('submit', functio
     if (newPassword.length < 8) {
         event.preventDefault();
         alert('Password must be at least 8 characters long');
-        return false;
-    }
-
-    // Check if password has at least one number and one special character
-    const hasNumber = /[0-9]/.test(newPassword);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
-
-    if (!hasNumber || !hasSpecial) {
-        event.preventDefault();
-        alert('Password must contain at least one number and one special character');
         return false;
     }
 

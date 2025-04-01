@@ -186,7 +186,7 @@ def changePassword():
         user.setPassword(newPassword)
         db.session.commit()
         flash("Password updated successfully", "success")
-        return render_template("dashboard.html")
+        return redirect(url_for("dashboard"))
 
     return render_template("changepassword.html")
 
