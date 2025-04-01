@@ -12,6 +12,13 @@ app.config["SESSION_COOKIE_SECURE"] = True
 # app.config["SESSION_COOKIE_SAMESITE"] = True
 
 
+def authenticationCheck():
+    if "user_id" not in session:
+        flash("Please login first", "error")
+        return redirect(url_for("login"))
+
+
+# Redirect to login
 @app.route("/")
 def index():
     return redirect(url_for("login"))
@@ -33,8 +40,10 @@ def login():
             flash("Invalid Username or Password", "error")
             return render_template("login.html")
 
+        # Find user (if they exist) in database
         user = db.session.query(User).filter_by(userName=username).first()
 
+        # Check if the password is correct
         if user and user.checkPassword(password):
             session["user_id"] = user.id
             session["username"] = user.userName
@@ -95,13 +104,39 @@ def createAccount():
 
 @app.route("/dashboard")
 def dashboard():
-    if "user_id" not in session:
-        flash("Please login first", "error")
-        return redirect(url_for("login"))
-
+    notAuthenticated = authenticationCheck()
+    if notAuthenticated:
+        return notAuthenticated
+    # Preload 10 most recent posts
     posts = db.session.query(Post).order_by(Post.createdAt.desc()).limit(10).all()
 
     return render_template("dashboard.html", username=session["username"], posts=posts)
+
+
+@app.route("/api/recentposts")
+def recentPosts():
+    notAuthenticated = authenticationCheck()
+    if notAuthenticated:
+        return notAuthenticated
+
+    offset = request.args.get("offset", 0)
+    offset = int(offset)
+
+    posts = (
+        db.session.query(Post)
+        .order_by(Post.createdAt.desc())
+        .offset(offset)
+        .limit(10)
+        .all()
+    )
+
+    data = []
+    for post in posts:
+        data.append(
+            {"id": post.id, "content": post.content, "createdAt": post.createdAt}
+        )
+
+    return jsonify(data)
 
 
 @app.route("/logout")
@@ -113,9 +148,9 @@ def logout():
 
 @app.route("/changepassword", methods=["POST", "GET"])
 def changePassword():
-    if "user_id" not in session:
-        flash("Please login first", "error")
-        return redirect(url_for("login"))
+    notAuthenticated = authenticationCheck()
+    if notAuthenticated:
+        return notAuthenticated
     if request.method == "POST":
         currentPassword = request.form.get("current_password")
         newPassword = request.form.get("new_password")
@@ -147,6 +182,7 @@ def changePassword():
             flash("Current password is incorrect", "error")
             return render_template("changepassword.html")
 
+        # Change users password
         user.setPassword(newPassword)
         db.session.commit()
         flash("Password updated successfully", "success")
@@ -157,10 +193,9 @@ def changePassword():
 
 @app.route("/createpost", methods=["GET", "POST"])
 def createPost():
-    if "user_id" not in session:
-        flash("Please log in first", "error")
-        return redirect(url_for("login"))
-
+    notAuthenticated = authenticationCheck()
+    if notAuthenticated:
+        return notAuthenticated
     if request.method == "POST":
         content = request.form.get("content")
 

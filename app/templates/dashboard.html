@@ -20,6 +20,28 @@
             font-weight: bold;
             z-index: 1000;
         }
+
+        .button-common {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .create-post-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        #loadMoreBtn {
+            display: block;
+            margin: 20px auto;
+        }
     </style>
 </head>
 
@@ -53,21 +75,62 @@
 
         <div class="content">
             {% block content %}
-            <div class="posts">
+            <div class="posts" id="posts-container">
                 <h4>Recent Posts</h4>
                 {% for post in posts %}
                 <div class="post">
-                    <p>{{ post.content }}</p>
+                    <p>{{ post.content }}</p> <!--jinja2 automatically encodes special characters like <, >, etc. so if backend validation fails this should catch anything else-->
                     <small>Posted on {{ post.createdAt }}</small>
                 </div>
                 {% endfor %}
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreBtn" class="button-common">Load More</button>
             </div>
             {% endblock %}
         </div>
     </div>
     {% if request.path != '/createpost' %}
-    <a href="{{ url_for('createPost') }}" class="create-post-button">Create Post</a>
+    <a href="{{ url_for('createPost') }}" class="create-post-button button-common">Create Post</a>
     {% endif %}
 </body>
+<script>
+    let offset = 10;
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const postsContainer = document.getElementById('posts-container')
+
+    loadMoreBtn.addEventListener('click', async() => {
+        try {
+            const url = `/api/recentposts?offset=${offset}`;
+            const response = await fetch(url);
+            if (!response.ok){
+                throw new Error(`Error loading posts: ${response.statusText}`);
+            }
+
+            const newPosts = await response.json();
+
+            if (newPosts.length === 0){
+                loadMoreBtn.innerText = "No more posts";
+                loadMoreBtn.disabled = true;
+                return
+            }
+
+            newPosts.forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.classList.add('post');
+                postDiv.innerHTML = `
+                  <p>${post.content}</p>
+                  <small>Posted on ${post.createdAt}</small>
+                `;
+                postsContainer.appendChild(postDiv);
+              });
+
+              offset += newPosts.length;
+        } catch (error) {
+        console.error(error);
+        alert("Failed to load more posts.");
+        }
+    });
+</script>
 
 </html>
