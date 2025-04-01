@@ -1,4 +1,13 @@
-from flask import request, jsonify, render_template, redirect, url_for, flash, session
+from flask import (
+    request,
+    jsonify,
+    render_template,
+    redirect,
+    url_for,
+    flash,
+    session,
+    Response,
+)
 from sqlalchemy.exc import IntegrityError
 from config import app, db, bl
 from models import User, Post
@@ -9,13 +18,25 @@ import os
 
 app.config["SECRET_KEY"] = os.urandom(24)
 app.config["SESSION_COOKIE_SECURE"] = True
-# app.config["SESSION_COOKIE_SAMESITE"] = True
 
 
 def authenticationCheck():
     if "user_id" not in session:
         flash("Please login first", "error")
         return redirect(url_for("login"))
+
+
+# Basic CSP allowing scripts, styles, etc. only from the same origin
+@app.after_request
+def applyCsp(response: Response) -> Response:
+    csp = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self'; "
+        "object-src 'none'; "
+    )
+    response.headers["Content-Security-Policy"] = csp
+    return response
 
 
 # Redirect to login
@@ -120,7 +141,10 @@ def recentPosts():
         return notAuthenticated
 
     offset = request.args.get("offset", 0)
-    offset = int(offset)
+    try:
+        offset = int(offset)
+    except ValueError:
+        return jsonify({})
 
     posts = (
         db.session.query(Post)
@@ -207,6 +231,10 @@ def createPost():
         # Remove any HTML tags entirely
         safeContent = bleach.clean(content, strip=True)
 
+        if safeContent == "" or safeContent == None:
+            flash("Error creating post", "error")
+            return redirect(url_for("dashboard"))
+
         # Save safe content in database with associated user and when it was created
         post = Post(
             content=safeContent, user_id=session["user_id"], createdAt=datetime.now()
@@ -233,9 +261,7 @@ def validatePassword(password):
     if re.search(regex, password) is None:
         return False
 
-    print(bl.check(password))
     if bl is not None and bl.check(password):
-        print(f"bl: {bl}, validity: {bl.check(password)}")
         return False
 
     return True

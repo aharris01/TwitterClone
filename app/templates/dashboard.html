@@ -42,7 +42,8 @@
                 <h4>Recent Posts</h4>
                 {% for post in posts %}
                 <div class="post">
-                    <p>{{ post.content }}</p> <!--jinja2 automatically encodes special characters like <, >, etc. so if backend validation fails this should catch anything else-->
+                    <p>{{ post.content }}</p>
+                    <!--jinja2 automatically encodes special characters like <, >, etc. so if backend validation fails this should catch anything else-->
                     <small>Posted on {{ post.createdAt }}</small>
                 </div>
                 {% endfor %}
@@ -57,43 +58,6 @@
     <a href="{{ url_for('createPost') }}" class="create-post-button button-common">Create Post</a>
     {% endif %}
 </body>
-<script>
-    let offset = 10;
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    const postsContainer = document.getElementById('posts-container')
-
-    loadMoreBtn.addEventListener('click', async() => {
-        try {
-            const url = `/api/recentposts?offset=${offset}`;
-            const response = await fetch(url);
-            if (!response.ok){
-                throw new Error(`Error loading posts: ${response.statusText}`);
-            }
-
-            const newPosts = await response.json();
-
-            if (newPosts.length === 0){
-                loadMoreBtn.innerText = "No more posts";
-                loadMoreBtn.disabled = true;
-                return
-            }
-
-            newPosts.forEach(post => {
-                const postDiv = document.createElement('div');
-                postDiv.classList.add('post');
-                postDiv.innerHTML = `
-                  <p>${post.content}</p>
-                  <small>Posted on ${post.createdAt}</small>
-                `;
-                postsContainer.appendChild(postDiv);
-              });
-
-              offset += newPosts.length;
-        } catch (error) {
-        console.error(error);
-        alert("Failed to load more posts.");
-        }
-    });
-</script>
+<script src="static/dashboard.js"></script>
 
 </html>

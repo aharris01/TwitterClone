@@ -10,7 +10,7 @@ import os
 class BloomFilter:
     def __init__(self):
         self.falsePositive = 0.05
-        self.itemCount = 47603
+        self.itemCount = 100007
         self.size = self.get_size(self.itemCount, self.falsePositive)
         self.hashCount = self.get_hash_count(self.size, self.itemCount)
         self.bitArray = bitarray(self.size)
@@ -88,7 +88,7 @@ bl = BloomFilter()
 
 baseDir = os.path.dirname(os.path.abspath(__file__))
 
-filePath = os.path.join(baseDir, "static", "Most-Popular-Letter-Passes.txt")
+filePath = os.path.join(baseDir, "resources", "10-million-password-list-top-100000.txt")
 
 with open(filePath, "r") as f:
     for line in f:
