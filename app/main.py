@@ -249,6 +249,10 @@ def createPost():
         if safeContent == "" or safeContent == None:
             flash("Error creating post", "error")
             return redirect(url_for("dashboard"))
+        
+        if len(safeContent) >= 256:
+            flash("Post too large", "error")
+            return redirect(url_for("dashboard"))
 
         # Save safe content in database with associated user and when it was created
         post = Post(

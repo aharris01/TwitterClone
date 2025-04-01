@@ -10,7 +10,7 @@
 
 <body>
     <div class="header">
-        <h2>Secure Application Dashboard</h2>
+        <h2>Twotter</h2>
         <div class="user-info">
             <span>Welcome, {{ username }}</span>
             <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
@@ -22,11 +22,16 @@
         <a href="{{ url_for('changePassword') }}">Change Password</a>
     </div>
     <div class="create-post-container">
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
         <h1>Create a New Post</h1>
-
-        {% if error %}
-        <div class="error">{{ error }}</div>
-        {% endif %}
 
         <form id="createPost" method="POST" action="{{ url_for('createPost') }}">
             <div>
