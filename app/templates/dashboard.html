@@ -6,6 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="static/style.css">
+    <style>
+        .create-post-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            z-index: 1000;
+        }
+    </style>
 </head>
 
 <body>
@@ -34,8 +49,25 @@
         </div>
 
         <h3>Dashboard</h3>
-        <p>Welcome to the secure application dashboard. Use the menu above to navigate.</p>
+        <p>Welcome to the dashboard. Use the menu above to navigate.</p>
+
+        <div class="content">
+            {% block content %}
+            <div class="posts">
+                <h4>Recent Posts</h4>
+                {% for post in posts %}
+                <div class="post">
+                    <p>{{ post.content }}</p>
+                    <small>Posted on {{ post.createdAt }}</small>
+                </div>
+                {% endfor %}
+            </div>
+            {% endblock %}
+        </div>
     </div>
+    {% if request.path != '/createpost' %}
+    <a href="{{ url_for('createPost') }}" class="create-post-button">Create Post</a>
+    {% endif %}
 </body>
 
 </html>

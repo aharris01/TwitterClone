@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Post</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <h2>Secure Application Dashboard</h2>
+        <div class="user-info">
+            <span>Welcome, {{ username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="menu">
+        <a href="{{ url_for('dashboard') }}">Home</a>
+        <a href="{{ url_for('changePassword') }}">Change Password</a>
+    </div>
+    <div class="content">
+        <h1>Create a New Post</h1>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form id="createPost" method="POST" action="{{ url_for('createPost') }}">
+            <div>
+                <textarea name="content" placeholder="What's on your mind?"></textarea>
+            </div>
+            <div>
+                <button type="submit" class="button">Post</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

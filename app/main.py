@@ -1,6 +1,9 @@
 from flask import request, jsonify, render_template, redirect, url_for, flash, session
+from sqlalchemy.exc import IntegrityError
 from config import app, db, bl
-from models import User
+from models import User, Post
+from datetime import datetime
+import bleach
 import re
 import os
 
@@ -63,16 +66,25 @@ def createAccount():
             )
             return render_template("createuser.html")
 
+        # Check if password follows the rules or is in bloom filter
         if not validatePassword(password):
             flash("Password too weak", "error")
             return render_template("createuser.html")
 
+        # Create a new user object
         newUser = User(userName=username)
+
+        # Set their password hash
         newUser.setPassword(password)
 
+        # Attempt to add user to database
         try:
             db.session.add(newUser)
             db.session.commit()
+            return redirect(url_for("login"))
+        except IntegrityError:
+            db.session.rollback()
+            flash("That username already exists", "error")
         except Exception as e:
             db.session.rollback()
             print(e)
@@ -87,7 +99,9 @@ def dashboard():
         flash("Please login first", "error")
         return redirect(url_for("login"))
 
-    return render_template("dashboard.html", username=session["username"])
+    posts = db.session.query(Post).order_by(Post.createdAt.desc()).limit(10).all()
+
+    return render_template("dashboard.html", username=session["username"], posts=posts)
 
 
 @app.route("/logout")
@@ -141,11 +155,44 @@ def changePassword():
     return render_template("changepassword.html")
 
 
+@app.route("/createpost", methods=["GET", "POST"])
+def createPost():
+    if "user_id" not in session:
+        flash("Please log in first", "error")
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        content = request.form.get("content")
+
+        # Check for empty content
+        if not content:
+            flash("Post content cannot be empty", "error")
+            return render_template("createpost.html")
+
+        # Remove any HTML tags entirely
+        safeContent = bleach.clean(content, strip=True)
+
+        # Save safe content in database with associated user and when it was created
+        post = Post(
+            content=safeContent, user_id=session["user_id"], createdAt=datetime.now()
+        )
+        db.session.add(post)
+        db.session.commit()
+
+        flash("Post successfully created", "success")
+        return redirect(url_for("dashboard"))
+
+    return render_template("createpost.html")
+
+
+# A username can only contain letters, numbers, underscores, and hyphens to help mitigate injection attacks
 def validateUsername(username):
     regex = "^[A-Za-z0-9_-]{1,32}$"
     return not (re.search(regex, username) == None)
 
 
+# A password can be any ASCII printable character, but must be within 8-64 characters
+# A bloom filter is used to prevent some commonly used passwords
 def validatePassword(password):
     regex = "^[\x20-\x7e]{8,64}$"
     if re.search(regex, password) is None:
