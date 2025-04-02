@@ -1,5 +1,6 @@
 from config import db
 from argon2 import PasswordHasher
+from datetime import datetime
 
 
 # The User class stores passwords with Argon2id hashing
@@ -15,7 +16,27 @@ class User(db.Model):
 
     def checkPassword(self, password):
         ph = PasswordHasher(time_cost=5, memory_cost=12288, parallelism=1)
-        return ph.verify(self.passwordHash, password)
+        try:
+            return ph.verify(self.passwordHash, password)
+        except Exception as e:
+            return False
 
     def to_json(self):
         return {"id": self.id, "userName": self.userName}
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    content = db.Column(db.String(256))
+    createdAt = db.Column(db.DateTime, default=datetime.today())
+
+    user = db.relationship("User", backref=db.backref("posts", lazy="dynamic"))
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "createdAt": self.createdAt,
+            "userID": self.user_id,
+        }
